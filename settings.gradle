@@ -9,3 +9,4 @@ dependencyResolutionManagement {
 rootProject.name = "training"
 include ':app'
 include ':day2_recyclerview'
+include ':day2_speedometer'
