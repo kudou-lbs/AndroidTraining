@@ -10,3 +10,4 @@ rootProject.name = "training"
 include ':app'
 include ':day2_recyclerview'
 include ':day2_speedometer'
+include ':day3_jetpack'

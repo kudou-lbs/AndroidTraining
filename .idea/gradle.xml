@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/day2_recyclerview" />
             <option value="$PROJECT_DIR$/day2_speedometer" />
+            <option value="$PROJECT_DIR$/day3_jetpack" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
