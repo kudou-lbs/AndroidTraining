@@ -1,11 +1,18 @@
 package com.lbs.day3_jetpack.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +24,12 @@ import com.lbs.day3_jetpack.view_model.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    MainViewModel mainViewModel;
+    private MainViewModel mainViewModel;
     private TextInputEditText etAccount, etPwd;
     private TextView tvAccount, tvPwd;
+    private ProgressBar pb_loading;
 
+    private ActivityMainBinding dataBinding;
     private User user;
 
     @Override
@@ -71,9 +80,10 @@ public class MainActivity extends AppCompatActivity {
     private void dataBindingInit(){
         //用于数据绑定
         //方法返回ViewDataBinding对象，对象的生成取决于Activity，如MainActivity则生成ActivityMainBinding
-        ActivityMainBinding dataBinding= DataBindingUtil.setContentView(this, R.layout.activity_main);
-        user=new User("admin","123456");
+        dataBinding= DataBindingUtil.setContentView(this, R.layout.activity_main);
+        user=new User("","");
         dataBinding.setUser(user);
+        pb_loading=findViewById(R.id.pb_loading);
 
         //通过生成的dataBinding可直接访问xml里的项
         //单向绑定，数据只会通过textView流向user
@@ -89,12 +99,43 @@ public class MainActivity extends AppCompatActivity {
             }else if(tmpPwd.isEmpty()){
                 myToast("请输入密码");
             }else{
-                myToast("账号创建成功");
-                user.setAccount(dataBinding.etAccount.getText().toString().trim());
-                user.setPwd(dataBinding.etPwd.getText().toString().trim());
+                pb_loading.setVisibility(View.VISIBLE);
+                mHandler.postDelayed(mRunnale,3000);
             }
         });
     }
+
+    //创建账号成功
+    private void buildSucceed(){
+        myToast("账号创建成功");
+        user.setIcon(getDrawable(R.drawable.kong));
+        user.setAccount(dataBinding.etAccount.getText().toString().trim());
+        user.setPwd(dataBinding.etPwd.getText().toString().trim());
+
+        pb_loading.setVisibility(View.GONE);
+    }
+
+    Handler mHandler=new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+                case 1:
+                    buildSucceed();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    Runnable mRunnale=new Runnable() {
+        @Override
+        public void run() {
+            Message msg=new Message();
+            msg.what=1;
+            mHandler.sendMessage(msg);
+        }
+    };
 
     private void myToast(String output){
         Toast.makeText(this,output,Toast.LENGTH_SHORT).show();
