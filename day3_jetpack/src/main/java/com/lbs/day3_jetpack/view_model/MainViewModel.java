@@ -13,17 +13,18 @@ public class MainViewModel extends ViewModel {
     //普通
     public String account;
     public String pwd;*/
-    //LiveData 可感知其他应用组件的生命周期。可确保LiveData仅更新处于活跃生命周期的应用组件观察者
+
+/*    //LiveData 可感知其他应用组件的生命周期。可确保LiveData仅更新处于活跃生命周期的应用组件观察者
     //这里使用MutableLiveData表示值的内容可变动，LiveData不可变
     public MutableLiveData<String> account=new MutableLiveData<>();
-    public MutableLiveData<String> pwd=new MutableLiveData<>();
+    public MutableLiveData<String> pwd=new MutableLiveData<>();*/
 
-/*    //dataBinding
+    //dataBinding
     public MutableLiveData<User> user;
     public MutableLiveData<User> getUser(){
         if(user==null){
             user=new MutableLiveData<>();
         }
         return user;
-    }*/
+    }
 }

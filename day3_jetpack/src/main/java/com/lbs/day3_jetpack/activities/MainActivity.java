@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         dataBindingInit();
     }
 
-    private void normalInit(){
+    /*private void normalInit(){
         setContentView(R.layout.activity_main);
 
         mainViewModel=new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MainViewModel.class);
@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
         tvPwd=findViewById(R.id.tv_pwd);
 
         findViewById(R.id.btn_login).setOnClickListener(v -> {
-            /*
+            *//*
             //普通
             mainViewModel.account=etAccount.getText().toString().trim();
-            mainViewModel.pwd=etPwd.getText().toString().trim();*/
+            mainViewModel.pwd=etPwd.getText().toString().trim();*//*
 
             //LiveData
             //使用setValue（只能在主线程调用）进行赋值，也可以使用postValue（可在任何线程调用）
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel.account.observe(this, account->tvAccount.setText("账号："+account));
         mainViewModel.pwd.observe(this, pwd->tvPwd.setText("密码："+pwd));
         //简化写法，原来的是需要new Observer对象并重写onChanged函数，那样比较清晰，但lambda表达式更简单
-    }
+    }*/
 
     private void dataBindingInit(){
         //用于数据绑定
@@ -78,8 +78,21 @@ public class MainActivity extends AppCompatActivity {
         //通过生成的dataBinding可直接访问xml里的项
         //单向绑定，数据只会通过textView流向user
         dataBinding.btnLogin.setOnClickListener(v -> {
-            user.setAccount(dataBinding.etAccount.getText().toString().trim());
-            user.setPwd(dataBinding.etPwd.getText().toString().trim());
+            String tmpAccount=dataBinding.etAccount.getText().toString().trim();
+            String tmpPwd=dataBinding.etPwd.getText().toString().trim();
+            if(tmpAccount.isEmpty()){
+                if(tmpPwd.isEmpty()){
+                    myToast("请输入账号和密码");
+                }else{
+                    myToast("请输入账号");
+                }
+            }else if(tmpPwd.isEmpty()){
+                myToast("请输入密码");
+            }else{
+                myToast("账号创建成功");
+                user.setAccount(dataBinding.etAccount.getText().toString().trim());
+                user.setPwd(dataBinding.etPwd.getText().toString().trim());
+            }
         });
     }
 
