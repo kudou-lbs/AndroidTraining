@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void asyncGetRequestByOkHttp(){
         OkHttpClient client=new OkHttpClient();
         Request request=new Request.Builder()
-                .url("https://www.wanandroid.com/wxarticle/list/434/1/json")
+                .url("https://wanandroid.com/wxarticle/list/408/1/json")
                 .build();
         Call call=client.newCall(request);
         call.enqueue(new Callback() {
