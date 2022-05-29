@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         //normalInit();
         dataBindingInit();
     }
-
+    
+    //原初始化函数，无dataBinding
     /*private void normalInit(){
         setContentView(R.layout.activity_main);
 
