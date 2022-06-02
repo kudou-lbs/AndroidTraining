@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adjust.sdk.Adjust;
 import com.adjust.sdk.AdjustConfig;
@@ -52,18 +53,30 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundleData =  getIntent().getExtras();
         if(null != bundleData){
             MpArticleList mpArticleList = (MpArticleList) bundleData.getSerializable("articlesData");
-            mDatas = mpArticleList.getDatas();
+            //来自SplashActivity的数据
+            if(null != mpArticleList) {
+                mDatas = mpArticleList.getDatas();
+            }else{
+                //无数据则重新获取
+                initMpListData();
+            }
         }
 
         //初始化界面布局
         initView();
         Trace.beginSection("prepareLoadAESKey_init");
         //准备网络请求AES key,与后台通信进行加密校验信息
-        String aesKey = prepareLoadAESKey();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String aesKey = prepareLoadAESKey();
+            }
+        }).start();
         Trace.endSection();
-        //加载公众号文章列表
+        //加载公众号文章列表。这部分直接在SplashActivity中做完然后putExtra()进来即可
         Trace.beginSection("MpListData_init");
-        initMpListData();
+        //这部分逻辑放到上面判断未收到来自SplashActivity的消息时调用，尝试重新获取数据。
+        //initMpListData();
         Trace.endSection();
 
     }
@@ -170,6 +183,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }

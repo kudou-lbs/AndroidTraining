@@ -5,6 +5,15 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/kudou/Documents/myAS/courseresources/lesson5/PerformanceOptimize/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/kudou/Documents/myAS/courseresources/lesson5/PerformanceOptimize/app/src/main/res/layout/activity_splash.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/kudou/Documents/myAS/courseresources/lesson5/PerformanceOptimize/app/src/main/res/layout/article_item.xml" value="0.25364583333333335" />
+      </map>
+    </option>
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
