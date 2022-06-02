@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 //无数据则重新获取
                 initMpListData();
             }
+        }else{
+            initMpListData();
         }
 
         //初始化界面布局

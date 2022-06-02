@@ -40,20 +40,14 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         adaptDisplayCutoutMode(this);
 
+         //修改了预加载文章数据函数，当获取到文章数据时即打开MainActivity并finish当前活动
+         preLoadArticleData();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //修改了预加载文章数据函数，当获取到文章数据时即打开MainActivity并finish当前活动
-                preLoadArticleData();
-            }
-        }, 0);
          Trace.beginSection("logSession_init");
          //startLogSession();
          //使用线程处理该函数
          new MyThread(this).run();
          Trace.endSection();
-
     }
 
     private void preLoadArticleData(){
