@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.global.network.wrapper.RetrofitServiceManager;
 import com.global.training.business.ArticlesResult;
@@ -19,7 +18,6 @@ import com.global.training.business.MpArticleService;
 import com.global.training.utils.DevicesUtil;
 
 import java.io.IOException;
-import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,21 +37,23 @@ public class SplashActivity extends AppCompatActivity {
         hideNavigationBar(getWindow());
         setContentView(R.layout.activity_splash);
         adaptDisplayCutoutMode(this);
-
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                //修改了预加载文章数据函数，当获取到文章数据时即打开MainActivity并finish当前活动
-                preLoadArticleData();
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                Bundle  bundle = new Bundle();
+                if(null != articlesList){
+                    bundle.putSerializable("articlesData",articlesList);
+                    intent.putExtras(bundle);
+                }
+                startActivity(intent);
+                finish();
             }
-        }, 0);
+        }, 1200);
          Trace.beginSection("logSession_init");
-         //startLogSession();
-         //使用线程处理该函数
-         new MyThread(this).run();
+         startLogSession();
          Trace.endSection();
-
+        preLoadArticleData();
     }
 
     private void preLoadArticleData(){
@@ -64,42 +64,16 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<ArticlesResult> call, Response<ArticlesResult> response) {
                 Log.d(TAG, "onResponse---->"+response.body().getErrorCode());
                 articlesList = response.body().getData();
-                //获取成功则将获取到的数据发送至MainActivity
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                Bundle  bundle = new Bundle();
-                bundle.putSerializable("articlesData",articlesList);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
             }
 
             @Override
             public void onFailure(Call<ArticlesResult> call, Throwable t) {
-                //获取失败也需要打开主活动，但提示故障原因如网络原因
-                Toast.makeText(SplashActivity.this,"当前网络不稳定，数据初始化失败",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                Bundle  bundle = new Bundle();
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
+
             }
         });
     }
 
-    private static class MyThread extends Thread{
 
-         SoftReference<SplashActivity> softReference;
-         public MyThread(SplashActivity activity){
-             softReference=new SoftReference<>(activity);
-         }
-
-         @Override
-        public void run() {
-             if(null != softReference){
-                 softReference.get().startLogSession();
-             }
-        }
-    }
 
     private void startLogSession(){
         MpArticleService articleService = RetrofitServiceManager.getInstance().create(MpArticleService.class);
@@ -114,7 +88,6 @@ public class SplashActivity extends AppCompatActivity {
         requestData.put("TimeZone",DevicesUtil.getCurrentTimeZone());
         requestData.put("OSVersion",DevicesUtil.getOSVersion());
 
-        //这个函数作用不明确，onResponse()也无实际意义
         Call<ResponseBody> call = articleService.startSession(requestData);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
